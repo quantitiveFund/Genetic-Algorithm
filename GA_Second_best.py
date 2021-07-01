@@ -7,9 +7,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-POP_SIZE = 200
+POP_SIZE = 300
 MUTATION_RATE = 0.1
-N_GENERATIONS = 20
+N_GENERATIONS = 100
 X_BOUND = [0, 5]
 
 def F(x):
@@ -25,8 +25,7 @@ def select(pop, fitness):
 def crossover(pop):
     for index in range(len(pop)):
         if index % 2 == 0:
-            pop[index,] = (pop[index,] + pop[index + 1,]) / 2
-            pop[index + 1,] = (pop[index,] + pop[index + 1,]) / 2 + 0.01
+            pop[index,],pop[index + 1,] = (pop[index,] + pop[index + 1,]) / 2, (pop[index,] + pop[index + 1,]) / 2 + 0.01
     return pop
 
 def mutate(pop):
@@ -46,13 +45,13 @@ for i in range(N_GENERATIONS):
     pop = np.sort(pop)
 
     if 'sca' in globals(): sca.remove()
-    sca = plt.scatter(pop, F(pop), s=200, lw=0, c='red', alpha=0.5); plt.pause(0.2)
+    sca = plt.scatter(pop, F(pop), s=200, lw=0, c='red', alpha=0.5); plt.pause(0.1)
 
     pop = crossover(pop)
     pop = mutate(pop)
     print("Most fitted sample: ", pop[np.argmax(fitness)])
 
-plt.ioff(),plt.show()
+# plt.ioff(),plt.show()
 
 
 
