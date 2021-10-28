@@ -81,7 +81,7 @@ N_GENERATIONS = 300     #繁衍总次数
 lst_best_sharp = []
 
 #矩阵法
-#适应性函数（在曲线中的高度）
+#适应性函数,计算夏普比率，无风险利率用0.05计算
 def get_fitness(weights):
     weights,cov_mat,return_mat,risk_mat= get_portfolio(weights,df_yield,assets_num,pop_num)
     sharpratio = (return_mat-0.05)/ np.diag(np.sqrt(risk_mat)).reshape(-1,1)
@@ -118,11 +118,11 @@ def plotting():
     plt.xlim(0, 3)
     plt.ylim(-0.3, 1)
     plt.scatter(np.diag(np.sqrt(risk_mat)), return_mat, s=20, lw=0, c='red', alpha=0.1)
+    plt.scatter(np.diag(np.sqrt(cov_mat)),yield_,s = 20, alpha = 0.6)
+    plt.plot([0,np.sqrt(np.diag(risk_mat))[np.argmax(sharp_r)]],[0.05,return_mat[np.argmax(sharp_r)][0]],'y:')
     plt.xlabel('variance')
     plt.ylabel('expected return')
     plt.pause(0.05)
-
-
 
 # 主循环部分
 sharp_r = get_fitness(weights)
@@ -130,9 +130,10 @@ fitness = re_fitness(sharp_r)
 
 for _ in range(N_GENERATIONS):
 
-    # plt.scatter(np.diag(np.sqrt(risk_mat)), return_mat, lw=0, c='red', alpha=0.3);plt.pause(0.01)
+
     # 遗传进化部分
     plotting()
+
     weights = select(weights, fitness)
     weights_copy = weights.copy()
 
